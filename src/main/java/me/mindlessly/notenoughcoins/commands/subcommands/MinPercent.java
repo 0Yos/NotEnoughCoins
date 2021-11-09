@@ -22,13 +22,14 @@ public class MinPercent implements Subcommand {
     @Override
     public boolean processCommand(ICommandSender sender, String[] args) {
         if (args.length > 0) {
+            int percent;
             try {
-                Integer.parseInt(args[0]);
+                percent = Integer.parseInt(args[0]);
             } catch (Exception e) {
                 return false;
             }
-            ConfigHandler.writeConfig(Configuration.CATEGORY_GENERAL, "MinPercent", args[0]);
-            Utils.sendMessageWithPrefix("&aMinimum profit percentage set to " + Integer.parseInt(args[0]), sender);
+            ConfigHandler.writeConfig(Configuration.CATEGORY_GENERAL, "MinPercent", percent);
+            Utils.sendMessageWithPrefix("&aMinimum profit percentage set to " + percent, sender);
             return true;
         } else return false;
     }

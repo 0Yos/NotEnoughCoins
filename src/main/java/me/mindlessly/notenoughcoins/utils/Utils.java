@@ -52,11 +52,11 @@ public class Utils {
     }
 
     public static void sendMessageWithPrefix(String message, ICommandSender sender) {
-        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + ("NEC ") + message.replaceAll("&", "§")));
+        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + ("[NEC] ") + EnumChatFormatting.RESET + message.replaceAll("&", "§")));
     }
 
     public static void sendMessageWithPrefix(String message, ClickEvent clickEvent, ICommandSender sender) {
-        ChatComponentText result = new ChatComponentText(EnumChatFormatting.GOLD + ("NEC ") + message.replaceAll("&", "§"));
+        ChatComponentText result = new ChatComponentText(EnumChatFormatting.AQUA + ("[NEC] ") + EnumChatFormatting.RESET + message.replaceAll("&", "§"));
         ChatStyle style = new ChatStyle();
         style.setChatClickEvent(clickEvent);
         result.setChatStyle(style);

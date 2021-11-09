@@ -207,51 +207,45 @@ public class ApiHandler {
 					String uuid = item.getAsJsonObject().get("uuid").getAsString();
 					String auctioneer = item.getAsJsonObject().get("auctioneer").getAsString();
 					String rawName = item.getAsJsonObject().get("item_name").getAsString();
-					if (!Minecraft.getMinecraft().thePlayer.getUniqueID().toString().equals(auctioneer)) {
-						if (!ignored.contains(uuid)) {
-							if (rawName.contains(entry.getKey())) {
-								if (item.getAsJsonObject().has("bin")
-										&& item.getAsJsonObject().get("bin").getAsBoolean()) {
-									if (item.getAsJsonObject().has("claimed")
-											&& (!item.getAsJsonObject().get("claimed").getAsBoolean())) {
-										double startingBid = item.getAsJsonObject().get("starting_bid").getAsDouble();
-										if (startingBid < entry.getValue()) {
-											if (startingBid <= Toggle.purse) {
-												String name = new String(rawName.getBytes(), StandardCharsets.UTF_8);
+					if (!Minecraft.getMinecraft().thePlayer.getUniqueID().toString().equals(auctioneer)
+							&& !ignored.contains(uuid)
+							&& rawName.contains(entry.getKey())
+							&& item.getAsJsonObject().has("bin")
+							&& item.getAsJsonObject().get("bin").getAsBoolean()
+							&& !item.getAsJsonObject().get("claimed").getAsBoolean()) {
+						double startingBid = item.getAsJsonObject().get("starting_bid").getAsDouble();
+						if (startingBid < entry.getValue() && startingBid <= Toggle.purse) {
+							String name = new String(rawName.getBytes(), StandardCharsets.UTF_8);
 
-												long minProfit = Long.parseLong(ConfigHandler.config.getString(
-														"MinProfit", Configuration.CATEGORY_GENERAL, "50000",
-														"The minimum amount of profit need for the mod to show the flip in the chat"));
-												double profit;
-												double percentProfit;
-												int minPercentProfit = Integer.parseInt(ConfigHandler.config.getString(
-														"MinPercent", Configuration.CATEGORY_GENERAL, "50",
-														"The minimum amount of profit percentage need for the mod to show the flip in the chat"));
-												if (entry.getValue() - startingBid > minProfit) {
-													if (startingBid >= 1000000) {
-														profit = (entry.getValue() - startingBid)
-																- (entry.getValue() * 0.02);
-														percentProfit = (((entry.getValue() - startingBid)
-																- (entry.getValue() * 0.02)) / startingBid) * 100;
-													} else {
-														profit = (entry.getValue() - startingBid)
-																- (entry.getValue() * 0.01);
-														percentProfit = (((entry.getValue() - startingBid)
-																- (entry.getValue() * 0.01)) / startingBid) * 100;
-													}
-													if (profit > minProfit && percentProfit > minPercentProfit) {
-														Toggle.namedDataset.put(name, profit);
-														Toggle.commands.add("/viewauction " + uuid);
-														Toggle.rawNames.add(entry.getKey());
-														Toggle.percentageProfit.add(percentProfit);
-														ignored.add(uuid);
-													}
-												}
-											}
-										}
-									}
+							long minProfit = Long.parseLong(ConfigHandler.config.getString(
+									"MinProfit", Configuration.CATEGORY_GENERAL, "50000",
+									"The minimum amount of profit need for the mod to show the flip in the chat"));
+							double profit;
+							double percentProfit;
+							int minPercentProfit = ConfigHandler.config.getInt(
+									"MinPercent", Configuration.CATEGORY_GENERAL, 50,
+									Integer.MIN_VALUE, Integer.MAX_VALUE, "The minimum amount of profit percentage need for the mod to show the flip in the chat");
+							if (entry.getValue() - startingBid > minProfit) {
+								if (startingBid >= 1000000) {
+									profit = (entry.getValue() - startingBid)
+											- (entry.getValue() * 0.02);
+									percentProfit = (((entry.getValue() - startingBid)
+											- (entry.getValue() * 0.02)) / startingBid) * 100;
+								} else {
+									profit = (entry.getValue() - startingBid)
+											- (entry.getValue() * 0.01);
+									percentProfit = (((entry.getValue() - startingBid)
+											- (entry.getValue() * 0.01)) / startingBid) * 100;
+								}
+								if (profit > minProfit && percentProfit > minPercentProfit) {
+									Toggle.namedDataset.put(name, profit);
+									Toggle.commands.add("/viewauction " + uuid);
+									Toggle.rawNames.add(entry.getKey());
+									Toggle.percentageProfit.add(percentProfit);
+									ignored.add(uuid);
 								}
 							}
+
 						}
 					}
 				}

@@ -111,21 +111,15 @@ public class Toggle implements Subcommand {
 
 						for (Map.Entry<String, Double> entry : namedDataset.entrySet()) {
 							long profit = Math.abs(entry.getValue().longValue());
-							IChatComponent result = new ChatComponentText(EnumChatFormatting.AQUA + "[NEC] "
-									+ EnumChatFormatting.YELLOW + entry.getKey() + " "
-									+ (profit > 200_000 || purse / 5 < 100_000 ? EnumChatFormatting.GREEN
-											: profit > 100_000 || purse / 5 < 200_000 ? EnumChatFormatting.GOLD
-													: EnumChatFormatting.YELLOW)
-									+ "+$" + Utils.formatValue(profit) + " " + EnumChatFormatting.GOLD + "PP:" + " "
-									+ EnumChatFormatting.GREEN + percentageProfit.get(count).intValue() + "%" + " "
-									+ EnumChatFormatting.GOLD
-									+ (noSales == false ? "Sales:" + " " + EnumChatFormatting.GREEN + demand + "/day"
-											: ""));
+							Utils.sendMessageWithPrefix("&e" + entry.getKey() + " "
+									+ (profit > 200_000 || purse / 5 < 100_000 ? "&a"
+									: profit > 100_000 || purse / 5 < 200_000 ? "&6" : "&e")
+									+ "+$" + Utils.formatValue(profit) + " &6" + "PP: "
+									+ "&a" + percentageProfit.get(count).intValue() + "% "
+									+ "&6"
+									+ (!noSales ? "Sales: " + "$a" + demand + "/day"
+									: ""), new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(count)), sender);
 
-							ChatStyle style = new ChatStyle().setChatClickEvent(
-									new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(count)));
-							result.setChatStyle(style);
-							sender.addChatMessage(result);
 							count++;
 							noSales = false;
 						}

@@ -117,7 +117,7 @@ public class Toggle implements Subcommand {
 									+ "+$" + Utils.formatValue(profit) + " &6" + "PP: "
 									+ "&a" + percentageProfit.get(count).intValue() + "% "
 									+ "&6"
-									+ (!noSales ? "Sales: " + "$a" + demand + "/day"
+									+ (!noSales ? "Sales: " + "&a" + demand + "/day"
 									: ""), new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(count)), sender);
 
 							count++;

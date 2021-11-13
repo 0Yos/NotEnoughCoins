@@ -1,29 +1,25 @@
 package me.mindlessly.notenoughcoins.commands.subcommands;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import me.mindlessly.notenoughcoins.utils.ApiHandler;
 import me.mindlessly.notenoughcoins.utils.ConfigHandler;
 import me.mindlessly.notenoughcoins.utils.Reference;
 import me.mindlessly.notenoughcoins.utils.Utils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Toggle implements Subcommand {
 	// Take initial set of lbins, take second set, and use compared set to identify
@@ -54,11 +50,7 @@ public class Toggle implements Subcommand {
 		if (ConfigHandler.getString(Configuration.CATEGORY_GENERAL, "Flip").equals("true")) {
 			Utils.sendMessageWithPrefix("&aFlipper alerts enabled.", sender);
 			if (ConfigHandler.hasKey(Configuration.CATEGORY_GENERAL, "alertsound")) {
-				if (ConfigHandler.getString(Configuration.CATEGORY_GENERAL, "alertsound").equals("true")) {
-					alertSound = true;
-				} else {
-					alertSound = false;
-				}
+				alertSound = ConfigHandler.getString(Configuration.CATEGORY_GENERAL, "alertsound").equals("true");
 			}
 			try {
 				ApiHandler.getBins(initialDataset);
@@ -134,9 +126,6 @@ public class Toggle implements Subcommand {
 									+ "&6"
 									+ (!noSales ? "Sales: " + "&a" + demand + "/day"
 									: ""), new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(count)), sender);
-
-							ChatStyle style = new ChatStyle().setChatClickEvent(
-									new ClickEvent(ClickEvent.Action.RUN_COMMAND, commands.get(count)));
 							if (alertSound) {
 								SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
 								if (soundHandler != null && Minecraft.getMinecraft().theWorld != null) {

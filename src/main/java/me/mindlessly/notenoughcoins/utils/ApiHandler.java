@@ -27,7 +27,7 @@ public class ApiHandler {
 
 	private static final ArrayList<String> nameFilter = new ArrayList<>(
 			Arrays.asList("STARRED", "SALMON", "PERFECT", "BEASTMASTER", "MASTER_SKULL", "BLAZE", "TITANIUM",
-					"SUPER_HEAVY", "WAND_OF", "FARM_ARMOR", "PURE_MITHRIL", "STEEL_CHESTPLATE"));
+					"SUPER_HEAVY", "WAND_OF", "FARM_ARMOR", "PURE_MITHRIL", "STEEL_CHESTPLATE", "MIDAS", "TRIBAL_SPEAR"));
 
 	public static void getBins(HashMap<String, Double> dataset) {
 		boolean skip;
@@ -140,7 +140,7 @@ public class ApiHandler {
 		}
 	}
 
-	private static String getUuid(String name) {
+	public static String getUuid(String name) {
 		try {
 			return Objects.requireNonNull(getJson("https://api.mojang.com/users/profiles/minecraft/" + name))
 					.getAsJsonObject().get("id").getAsString();
@@ -207,7 +207,7 @@ public class ApiHandler {
 					String uuid = item.getAsJsonObject().get("uuid").getAsString();
 					String auctioneer = item.getAsJsonObject().get("auctioneer").getAsString();
 					String rawName = item.getAsJsonObject().get("item_name").getAsString();
-					if (!Minecraft.getMinecraft().thePlayer.getUniqueID().toString().equals(auctioneer)
+					if (!Toggle.UUID.equals(auctioneer)
 							&& !ignored.contains(uuid)
 							&& rawName.contains(entry.getKey())
 							&& item.getAsJsonObject().has("bin")
@@ -245,7 +245,6 @@ public class ApiHandler {
 									ignored.add(uuid);
 								}
 							}
-
 						}
 					}
 				}
